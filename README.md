@@ -1,2 +1,3 @@
 # tk-pivot
-GUI that creates and displays pivot tables from Excel files downloaded from Quickbooks Online
+GUI that creates and displays pivot tables from Excel files downloaded from Quickbooks Online.
+It's crude right now, but it works as expected.
