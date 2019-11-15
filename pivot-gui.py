@@ -1,12 +1,8 @@
-###### Import Statements
-
 import importlib
 import tkinter as tk
 from tkinter import filedialog
 import pandas as pd
 
-
-###### Create Button Definition To Open File, Then Convert Excel File To Dataframe (Start Of Def: open_click)
 
 def open_click():
 
@@ -14,18 +10,16 @@ def open_click():
         if len(f) !=0:
                 df = pd.read_excel(f[0], header=None)
 
-                global imported_module # Import Module Based On Company Name (Still In Def: open_click)
+                global imported_module
                 comp_name = df.iloc[0,0].split(' ')[0].replace(',','')
                 imported_module = importlib.import_module(comp_name)
 
-                name = df.iloc[0,0] + ' ' + df.iloc[1,0] + ' ' + df.iloc[2,0] # Extract Title/Column Names And Drop Appropriate Rows (Still In Def: open_click)
+                name = df.iloc[0,0] + ' ' + df.iloc[1,0] + ' ' + df.iloc[2,0]
                 name = name.replace('  ',' ')
                 cols = df.iloc[4,1:].tolist()
                 data_set = df.drop([0,1,2,3,4]).reset_index(drop=True)
                 data_set = data_set[data_set[1] != "Beginning Balance"]
                 window.title(name)
-
-                # Initialize Lists/Dictionary For Following Loop (Still In Def: open_click)
 
                 frame = []
                 global frame_dict
@@ -33,7 +27,7 @@ def open_click():
                 frame_dict_keys = []
 
 
-                for idx, line in enumerate(data_set[1]): # Split Data In Excel Sheet And Store Each Frame In A Dictionary (Still In Def: open_click)
+                for idx, line in enumerate(data_set[1]):
                         if (pd.isna(line) == False) and (pd.isna(data_set.iloc[idx-1,1])):
                                 frame_title = data_set.iloc[idx-1,0].strip()
                                 frame_dict_keys.append(frame_title)
@@ -46,7 +40,6 @@ def open_click():
                                 frame_dict[frame_title] = temp_frame
                                 frame = []
 
-                # Initialize A List To Hold Buttons And Define Variable To Help With Layout (Still In Def: open_click)
                 
                 lst = sel.get().split(',')
                 quit_button.destroy()
@@ -61,8 +54,6 @@ def open_click():
                 num = int(len(frame_dict_keys)/3)
                 num1 = 2*num
                 
-                
-                # Display Buttons On Screen With Names Corresponding To Dataframe Dictionary Keys (Last Of Def: open_click)
                 
                 for idx, item in enumerate(frame_dict_keys):
                         for stuff in lst:
@@ -88,9 +79,6 @@ def open_click():
                 pivot_number.grid(row=1, column=1, sticky='ew')
                 pivot_number.insert(0,10)
                 return frame_dict, imported_module
-
-
-###### Define Button Click Function To Open A New WIndow With Appropriate Dataframe Displayed (Start Of Def: button_click)
 
 
 def button_click(choice):
@@ -148,14 +136,10 @@ def button_click(choice):
 
         pvt = pvt.reset_index()
         pvt = pvt.head(int(pivot_number.get()))
-        
-        # Create A Definition For A Button To Save Pivot Table To Exel File (Still In Def: button_click)
 
         def pivot_click():
                 sub.to_excel('~/Desktop/test_pivot_table.xlsx')
 
-
-        # Create A Pop-Up Window To Display Pivot Table That Matches The Excel Version (Last Of Def: button_click)
 
         r,c = pvt.shape
 
@@ -183,7 +167,7 @@ def button_click(choice):
                         if i % 2 != 0:
                                 if j == c:
                                         tk.Label(scroll_frame, bg='#EAEC81', text='${:,.2f}'.format(pvt.iloc[i-1,j-1]), borderwidth=1).grid(row=i,column=j, sticky='ew')
-                                elif (j != 1) and (pd.isna(pvt.iloc[i-1,j-1])): #Cyan Code #CBFEFE
+                                elif (j != 1) and (pd.isna(pvt.iloc[i-1,j-1])):
                                                 tk.Label(scroll_frame, bg='lightgray', fg='black', text='x', borderwidth=1).grid(row=i,column=j, sticky='ew')
                                 elif (j != 1) and (pvt.iloc[i-1,j-1] > compare + 0.25*compare):
                                         tk.Label(scroll_frame, bg='#FF7F7F', text='${:,.2f}'.format(pvt.iloc[i-1,j-1]), borderwidth=1).grid(row=i,column=j, sticky='ew')
@@ -223,14 +207,9 @@ def button_click(choice):
         canvas2.pack(fill='both', expand=True, side='bottom')
 
 
-###### Create GUI Window, Give It A Title And Give It A Minimum Size
-
 window = tk.Tk()
 window.title('Pivot Demo')
 #window.minsize(530,20)
-
-
-###### Create File Selection Button
 
 lab = tk.Label(window, fg='red', text='Choose Sections: ')
 lab.grid(row=0, column=0, sticky='ew')
@@ -247,7 +226,5 @@ open_button.grid(row=0, column=2, sticky='ew')
 
 quit_button = tk.Button(window, text='Exit', command=window.destroy)
 quit_button.grid(row=0, column=3, sticky='ew')
-
-###### Launch GUI
 
 window.mainloop()
