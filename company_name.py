@@ -17,8 +17,6 @@ months = {
 
 employees = [] # List of employee names goes here
 
-####### The first parser checks to see if the "Name" entry is an employee or a vendor name.
-
 def first_parser(data):
 
 	vendors, count1, count2 = [], 0, 0
@@ -44,7 +42,6 @@ def first_parser(data):
 			vendors[idx] = vendor
 	return vendors
 
-###### The second parser checks for "NAN" in the "Memo/Description" column, count1 and count2 determine the format of the vendor (used for splitting the vendor and description).
 
 def second_parser(data):
 
@@ -70,8 +67,7 @@ def second_parser(data):
 			vendor = vendor[0].upper()
 			vendors[idx] = vendor
 	return vendors
-		
-###### The third parser takes compares the results of the two previous parsers and returns a single list of vendor names
+
 
 def third_parser(lst1,lst2):
 	
